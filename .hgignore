@@ -1,0 +1,19 @@
+syntax: regexp
+^.idea
+^data/(?!index.php)
+^Data/(?!index.php)
+
+syntax: glob
+error_log
+npm-debug.log
+Thumbs.db
+Thumbs.db.orig
+.DS_Store
+.DS_Store.orig
+.git
+.git/*
+.gitattributes
+.gitignore
+config.php
+
+
