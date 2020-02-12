@@ -2,6 +2,7 @@ syntax: regexp
 ^.idea
 ^data/(?!index.php)
 ^Data/(?!index.php)
+^macros/(?!index.php)
 
 syntax: glob
 error_log
