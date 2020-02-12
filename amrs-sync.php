@@ -1,15 +1,15 @@
 <?php
 
-$remoteHost       = "127.0.0.1";  //MySQL Server    
-$userName         = "root";       //MySQL Username     
-$password         = "zaq12345";   //MySQL Password     
-$amrsDb           = "amrs";       //MySQL Database Name  
+$remoteHost       = "127.0.0.1";  //Remote MySQL Server    
+$userName         = "root";       //Remote MySQL Username     
+$password         = "zaq12345";   //Remote MySQL Password     
+$amrsDb           = "amrs";       //Remote MySQL Database Name  
 
 
-$localhost       = "127.0.0.1";  //MySQL Server    
-$localUserName   = "root";       //MySQL Username     
-$localPassword   = "zaq12345";   //MySQL Password     
-$amrsTempDb      = 'amrs_temp';  //MySQL Database Name  
+$localhost       = "127.0.0.1";  //Local MySQL Server    
+$localUserName   = "root";       //Local MySQL Username     
+$localPassword   = "zaq12345";   //Local MySQL Password     
+$amrsTempDb      = 'amrs_temp';  //Local MySQL Database Name  
 
 // if (isset($argc) && $argc > 1) {
 //     $amrsTempDb = $argv[1]; // who

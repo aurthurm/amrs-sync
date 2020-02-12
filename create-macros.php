@@ -1,14 +1,19 @@
 <?php
 
-$whonetPath = ".";
+$whonetPath = "/Users/amitdugar/Downloads/WHONET";
 
-$whonetMacroFolder = "macros";
-$whonetOutputFolder = "/Users/amitdugar/Downloads/WHONET/Output";
+$whonetMacroFolder = "Macros";
+$whonetOutputFolder = "Output";
 $labname = "labname";
+
+// Priority Pathogens
 $organisms = "eco, kpn, aba, sau, spn, sal";
 
+// Uncomment the following line if you want to include all pathogens
+// $organisms =  "ALL";
 
-$dir = opendir(realpath($whonetOutputFolder));
+
+$dir = opendir(realpath($whonetPath. DIRECTORY_SEPARATOR. $whonetOutputFolder));
 clearstatcache();
 $yesdate = strtotime("-1 days");
 
@@ -21,7 +26,7 @@ while (false != ($file = readdir($dir))) {
     }
 
     if (substr($file, -4) == ".dbf") {
-        if (filemtime($whonetOutputFolder . DIRECTORY_SEPARATOR . $file) >= $yesdate) {
+        if (filemtime($whonetPath. DIRECTORY_SEPARATOR. $whonetOutputFolder . DIRECTORY_SEPARATOR . $file) >= $yesdate) {
             $dataFiles[] =  "Data file = $file";
         }
     }
@@ -47,7 +52,7 @@ Study Antibiotics = All
 Options, Isolate Listing:  Test interpretations = True
 Organisms = $organisms
 Separate Files = True
-$dataFileString
+{$dataFileString}
 Output = DBASE File ({$labname}_interpretations.dbf)";
 
 
