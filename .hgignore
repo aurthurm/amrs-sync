@@ -3,6 +3,7 @@ syntax: regexp
 ^data/(?!index.php)
 ^Data/(?!index.php)
 ^macros/(?!index.php)
+^logs/(?!index.php)
 
 syntax: glob
 error_log

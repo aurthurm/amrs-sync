@@ -1,15 +1,6 @@
 <?php
 
-$remoteHost       = "127.0.0.1";  //Remote MySQL Server    
-$userName         = "root";       //Remote MySQL Username     
-$password         = "zaq12345";   //Remote MySQL Password     
-$amrsDb           = "amrs";       //Remote MySQL Database Name  
-
-
-$localhost       = "127.0.0.1";  //Local MySQL Server    
-$localUserName   = "root";       //Local MySQL Username     
-$localPassword   = "zaq12345";   //Local MySQL Password     
-$amrsTempDb      = 'amrs_temp';  //Local MySQL Database Name  
+include('config.php');
 
 // if (isset($argc) && $argc > 1) {
 //     $amrsTempDb = $argv[1]; // who
@@ -40,8 +31,8 @@ $sqlDrugsResult = $remoteMysql->query($sqlDrugs);
 
 $fullDruglist = array();
 $amrcolumnHeaders = array();
-$sqlAmr = "select * from amr_surveillance limit 1";
-$sqlAmrantibiotics = "select * from amr_antibiotics limit 1";
+$sqlAmr = "SELECT * FROM amr_surveillance LIMIT 1";
+$sqlAmrantibiotics = "SELECT * FROM amr_antibiotics LIMIT 1";
 $amrResult = $remoteMysql->query($sqlAmr);
 $amrAntiResult = $remoteMysql->query($sqlAmrantibiotics);
 
@@ -67,7 +58,7 @@ if (mysqli_num_rows($dysqlResult)) {
         if (strpos($dyrow[0], '_interpretations') === false) {
             // $dyrow[0] = 'w0195who_tst';
             // print_r($dyrow[0]);
-            $sql = "select * from " . $dyrow[0];
+            $sql = "SELECT * FROM " . $dyrow[0];
 
             // $amrRowcount = mysqli_num_rows($amrResult);
             // $amrAntibioticsRowcount = mysqli_num_rows($amrAntiResult);
@@ -94,7 +85,11 @@ if (mysqli_num_rows($dysqlResult)) {
             }
 
             foreach ($result as $row) {
-                $interpret = 'select * from ' . $dyrow[0] . '_interpretations where PATIENT_ID = "' . $row['patient_id'] . '" and SPEC_NUM = "' . $row['spec_num'] . '" ';
+
+                $interpretSql = 'SELECT * FROM ' . $dyrow[0] . '_interpretations where PATIENT_ID = "' . $row['patient_id'] . '" and SPEC_NUM = "' . $row['spec_num'] . '" ';
+                $interpretRes = $localMysql->query($interpretSql);
+                $interpret = $interpretRes->fetch_array(MYSQLI_ASSOC);
+
                 $insertQuery = "";
                 $insertValues = "";
                 foreach ($diffArray as $j) {
@@ -116,30 +111,33 @@ if (mysqli_num_rows($dysqlResult)) {
                         }
                     }
                 }
-                $amrsurInsertSql = "INSERT into amr_surveillance (" . $insertQuery . ") VALUES (" . $insertValues . ")";
+                $amrsurInsertSql = "INSERT INTO amr_surveillance (" . $insertQuery . ") VALUES (" . $insertValues . ")";
                 $InsertorNot = $remoteMysql->query($amrsurInsertSql);
                 $amrRowcount = $remoteMysql->insert_id;
                 $amrsurInsRowcount++;
-                $file_data = $amrsurInsRowcount . "\t" . $amrsurInsertSql . "\n";
-                if (!$InsertorNot)
-                    file_put_contents('log/amrsSur.txt', $file_data, FILE_APPEND);
-                else
+                $file_data = $amrsurInsertSql . PHP_EOL;;
+                if (!$InsertorNot) {
+                    file_put_contents('logs/amrs-surveillance.txt', $file_data, FILE_APPEND);
+                } else {
                     $InsertedRowamr++;
+                }
+
                 // print_r($amrsurInsRowcount."\t");
                 // print_r($InsertorNot);
                 // print_r("\n");
 
                 foreach ($intersectArray as $k) {
+                    
                     if ($row[$k]) {
 
                         $interpretVal = isset($interpret[$k]) ? $interpret[$k] : null;
-                        echo $amrAntibiotics = 'INSERT into amr_antibiotics(`amr_id`, `antibiotic`, `value`, `interpretation`) VALUES ("' . $amrRowcount . '","' . $k . '","' . $row[$k] . '", "' . $interpretVal . '" )';
+                        $amrAntibiotics = 'INSERT INTO amr_antibiotics(`amr_id`, `antibiotic`, `value`, `interpretation`) VALUES ("' . $amrRowcount . '","' . $k . '","' . $row[$k] . '", "' . $interpretVal . '" )';
                         $InsertorNotAntibiotic = $remoteMysql->query($amrAntibiotics);
                         $amrAntibioticsRowcount = $remoteMysql->insert_id;
                         $amrantibioticInsRowcount++;
-                        $file_data_antibiotic = $amrantibioticInsRowcount . "\t" . $amrAntibiotics . "\n";
+                        $file_data_antibiotic = $amrAntibiotics . PHP_EOL;
                         if (!$InsertorNotAntibiotic)
-                            file_put_contents('log/amrsAntibiotic.txt', $file_data_antibiotic, FILE_APPEND);
+                            file_put_contents('logs/amrs-antibiotic.txt', $file_data_antibiotic, FILE_APPEND);
                         else
                             $InsertedRowant++;
                         // print_r($amrAntibiotics);
