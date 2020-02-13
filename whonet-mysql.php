@@ -1,6 +1,7 @@
 <?php
 
 require __DIR__ . '/vendor/autoload.php';
+require __DIR__ . '/config.php';
 
 use XBase\Table;
 use XBase\Record;
@@ -8,12 +9,10 @@ use Ulrichsg\Getopt\Getopt;
 use Ulrichsg\Getopt\Option;
 
 
-$host       = "127.0.0.1";
-$user       = "root";
-$password   = "zaq12345";
-$dbname     = "amrs_temp";
-$port       = 3306;
-$mysqli     = new mysqli($host, $user, $password, $dbname, $port);
+$mysqli          = new mysqli($localhost, $localUserName, $localPassword, $amrsTempDb, $localPort);
+
+$knownDateFields = array('date_birth', 'spec_date', 'date_data');
+
 
 
 function usage($errormessage = "error")
@@ -100,7 +99,10 @@ foreach ($operands as $sourcefile) {
                 continue;
             }
             $cell = $record->getObject($column);
-            if (($column->getType() == Record::DBFFIELD_TYPE_DATETIME) && $cell) {
+
+            if ((in_array($column->getName(), $knownDateFields)) && $cell) {
+                $cell = date('Y-m-d', $cell - 3600);
+            } else if (($column->getType() == Record::DBFFIELD_TYPE_DATETIME) && $cell) {
                 $cell = date('Y-m-d H:i:s', $cell - 3600);
             }
             $row .= "\"" . addslashes($cell) . "\",";

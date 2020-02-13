@@ -1,6 +1,6 @@
 <?php
 
-include('config.php');
+require __DIR__ . '/config.php';
 
 // if (isset($argc) && $argc > 1) {
 //     $amrsTempDb = $argv[1]; // who
@@ -55,6 +55,7 @@ if (mysqli_num_rows($dysqlResult)) {
         $intersectArray = array();
         $diffArray = array();
         // $dyrow[0] = 'w0195who_tst';
+
         if (strpos($dyrow[0], '_interpretations') === false) {
             // $dyrow[0] = 'w0195who_tst';
             // print_r($dyrow[0]);

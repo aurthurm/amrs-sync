@@ -42,7 +42,7 @@ Study Antibiotics = All
 Organisms = $organisms
 Separate Files = True
 {$dataFileString}
-Output = DBASE File ({$labname}_results.dbf)";
+Output = DBASE File ({$labname}.dbf)";
 
 
 $interpretationMacroContent = "Macro Name = {$labname}_interpretations
