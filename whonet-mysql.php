@@ -14,7 +14,6 @@ $mysqli          = new mysqli($localhost, $localUserName, $localPassword, $amrsT
 $knownDateFields = array('date_birth', 'spec_date', 'date_data');
 
 
-
 function usage($errormessage = "error")
 {
     global $argv;
@@ -52,7 +51,7 @@ foreach ($operands as $sourcefile) {
     $destination = fopen($destinationfile, 'w');
     $source = new Table($sourcefile, null, $encoding);
 
-    echo "Processing " . $source->getRecordCount() . " records from file $sourcefile using $encoding encoding\n";
+    error_log("Processing " . $source->getRecordCount() . " records from file $sourcefile using $encoding encoding" . PHP_EOL);
 
     $tableName = basename(strtolower($source->getName()), ".dbf");
     $tableName = str_replace("-", "_", $tableName);
@@ -133,7 +132,7 @@ foreach ($operands as $sourcefile) {
         }
     }
     fclose($destination);
-    echo "Export done: " . $source->getDeleteCount() . " deleted records ommitted\n";
+    error_log("Completed conversion" . PHP_EOL);
 }
 
 function mapTypeToSql($type_short, $length, $decimal)
