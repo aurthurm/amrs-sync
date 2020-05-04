@@ -1,22 +1,10 @@
 <?php
 
-$whonetPath = "/Users/amitdugar/Downloads/WHONET";
-
-$whonetMacroFolder = "Macros";
-$whonetOutputFolder = "Output";
-$labname = "labname";
-
-// Priority Pathogens
-$organisms = "eco, kpn, aba, sau, spn, sal";
-
-// Uncomment the following line if you want to include all pathogens
-// $organisms =  "ALL";
-
+require __DIR__ . '/config.php';
 
 $dir = opendir(realpath($whonetPath. DIRECTORY_SEPARATOR. $whonetOutputFolder));
 clearstatcache();
 $yesdate = strtotime("-1 days");
-
 
 $dataFiles = array();
 
